@@ -71,6 +71,16 @@ angular
         abstract: true,
         template: '<ui-view/>'
       })
+      .state('login', {
+        url: '/login',
+        templateUrl: 'components/login/login.html',
+        controller: 'LoginCtrl'
+      })
+      .state('password', {
+        url: '/password',
+        templateUrl: 'components/login/password-change.html',
+        controller: 'PasswordChangeCtrl'
+      })
       .state('about', {
         url: '/about',
         templateUrl: 'components/about/about.html'
@@ -200,7 +210,23 @@ angular
   })
   .config(function($httpProvider){
     $httpProvider.interceptors.push('growlInterceptorWithoutErrors');
+    // Ergaenzt jede Anfrage an das Backend um das Zugriffstoken und leitet bei
+    // abgelaufener Sitzung auf die Anmeldemaske.
+    $httpProvider.interceptors.push('authInterceptor');
 
+  })
+  .run(function ($transitions, AuthService) {
+    // Ohne bestehende Sitzung fuehrt jeder Zustandswechsel zur Anmeldung. Die
+    // eigentliche Rechtepruefung findet im Backend statt; diese Weiche
+    // verhindert lediglich, dass die Oberflaeche ohne Token Anfragen stellt.
+    $transitions.onStart({}, function (transition) {
+      if (transition.to().name === 'login') {
+        return;
+      }
+      if (!AuthService.isAuthenticated()) {
+        return transition.router.stateService.target('login');
+      }
+    });
   })
   .config(function (localStorageServiceProvider) {
     localStorageServiceProvider

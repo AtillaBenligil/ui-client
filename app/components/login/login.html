@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-md-4 col-md-offset-4">
+    <div class="panel panel-default" style="margin-top: 60px;">
+      <div class="panel-heading">
+        <h3 class="panel-title">Anmeldung</h3>
+      </div>
+      <div class="panel-body">
+        <p class="text-muted">
+          Die Anmeldung erfolgt mit den Zugangsdaten des IRPsim-Verzeichnisses.
+        </p>
+
+        <form name="loginForm" ng-submit="login()" novalidate>
+          <div class="form-group">
+            <label for="username">Benutzername</label>
+            <input id="username" name="username" type="text" class="form-control"
+                   ng-model="credentials.username" required autofocus>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Passwort</label>
+            <input id="password" name="password" type="password" class="form-control"
+                   ng-model="credentials.password" required>
+          </div>
+
+          <div class="alert alert-danger" ng-if="error" role="alert">
+            {{ error }}
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block"
+                  ng-disabled="loginForm.$invalid || busy">
+            <span ng-if="!busy">Anmelden</span>
+            <span ng-if="busy">Anmeldung läuft …</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

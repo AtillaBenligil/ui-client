@@ -24,6 +24,16 @@
           <li ui-sref-active="active"><a ui-sref="about.documentation">Handbuch</a></li>
         </ul>
       </li>
+      <li uib-dropdown ng-if="$ctrl.username">
+        <a uib-dropdown-toggle>{{ $ctrl.username }} <span class="caret"></span></a>
+        <ul uib-dropdown-menu>
+          <li class="dropdown-header" ng-if="$ctrl.groups.length">Gruppen</li>
+          <li ng-repeat="group in $ctrl.groups"><a>{{ group }}</a></li>
+          <li class="divider" ng-if="$ctrl.groups.length"></li>
+          <li ui-sref-active="active"><a ui-sref="password">Passwort ändern</a></li>
+          <li><a ng-click="$ctrl.logout()">Abmelden</a></li>
+        </ul>
+      </li>
     </ul>
     <a ng-href="{{host === 'irpsim.uni-leipzig.de' ? 'http://irpsim.uni-leipzig.de/artifacts/navigation.html' : '#/'}}"
        class="col-md-3">
