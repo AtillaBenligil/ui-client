@@ -54,6 +54,9 @@
                   ng-confirmed-click-message="{{'Soll die Simulation <strong>'+simulation.id+'</strong> wirklich ' + (simulation.running?'gestoppt':'gelöscht') +' werden?'}}"
                   ng-confirmed-click="stopSimulation(simulation.id, !simulation.running)">
             </span>
+            <span class="fa fa-share-alt fa-hover pull-left"
+                  title="Simulation freigeben"
+                  ng-click="shareSimulation(simulation)"></span>
             <span class="fa fa-download fa-hover pull-left"
                   title="{{(checkResult(simulation) === 'running')?'Zwischenergebnisse anzeigen':'Ergebnisse anzeigen'}}"
                   ng-click="attachToRunningSimulation(simulation)"></span>

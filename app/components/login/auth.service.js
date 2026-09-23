@@ -15,12 +15,20 @@
  * Schliessen des Browserfensters verfaellt.
  */
 angular.module('irpsimApp')
-  .factory('AuthService', function ($http, $q, $window) {
+  .factory('AuthService', function ($http, $q, $window, $rootScope) {
 
     var BASE_URL = '/backend/simulation/auth';
     var TOKEN_KEY = 'irpsim.auth.token';
     var USER_KEY = 'irpsim.auth.user';
     var GROUPS_KEY = 'irpsim.auth.groups';
+    var ADMIN_GROUP = 'irpsim-admins';
+
+    /**
+     * Ereignis, das bei jeder An- oder Abmeldung gesendet wird. Die
+     * Werkzeugleiste liegt ausserhalb der Ansichten und wird nur einmal beim
+     * Start der Anwendung erzeugt; sie aktualisiert sich ueber dieses Ereignis.
+     */
+    var CHANGED_EVENT = 'irpsim.auth.changed';
 
     /**
      * Liest einen Wert aus dem sessionStorage.
@@ -34,6 +42,10 @@ angular.module('irpsimApp')
       } catch (e) {
         return null;
       }
+    }
+
+    function notify() {
+      $rootScope.$broadcast(CHANGED_EVENT);
     }
 
     function write(key, value) {
@@ -63,6 +75,7 @@ angular.module('irpsimApp')
           write(TOKEN_KEY, response.data.token);
           write(USER_KEY, response.data.username);
           write(GROUPS_KEY, angular.toJson(response.data.groups || []));
+          notify();
           return response.data;
         });
     };
@@ -81,6 +94,7 @@ angular.module('irpsimApp')
         write(TOKEN_KEY, null);
         write(USER_KEY, null);
         write(GROUPS_KEY, null);
+        notify();
       }
 
       if (!service.isAuthenticated()) {
@@ -107,6 +121,7 @@ angular.module('irpsimApp')
           write(TOKEN_KEY, null);
           write(USER_KEY, null);
           write(GROUPS_KEY, null);
+          notify();
         });
     };
 
@@ -133,6 +148,18 @@ angular.module('irpsimApp')
     };
 
     /**
+     * Prueft, ob der Benutzer laut Verzeichnis Administrator ist.
+     *
+     * Dient nur dazu, Verwaltungsfunktionen ein- oder auszublenden; die
+     * eigentliche Pruefung erfolgt im Backend.
+     *
+     * @returns {boolean} true, falls der Benutzer der Administratorgruppe angehoert
+     */
+    service.isAdministrator = function () {
+      return service.getGroups().indexOf(ADMIN_GROUP) >= 0;
+    };
+
+    /**
      * @returns {boolean} true, falls eine Sitzung besteht
      */
     service.isAuthenticated = function () {
@@ -150,7 +177,10 @@ angular.module('irpsimApp')
       write(TOKEN_KEY, null);
       write(USER_KEY, null);
       write(GROUPS_KEY, null);
+      notify();
     };
+
+    service.CHANGED_EVENT = CHANGED_EVENT;
 
     return service;
   });

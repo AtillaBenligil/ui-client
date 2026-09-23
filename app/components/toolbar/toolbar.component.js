@@ -2,16 +2,30 @@
   'use strict';
 
   /* @ngInject */
-  function ToolbarController(toolbarServices, AuthService, $state) {
+  function ToolbarController(toolbarServices, AuthService, $state, $scope) {
     var vm = this;
     vm.modelName = 'IRPopt';
 
-    vm.$onInit = function () {
-      toolbarServices.getModelDefinitions().then(function (modelDefinitions) {
-        vm.modelDefinitions = modelDefinitions;
-      });
+    // Die Leiste wird nur einmal beim Start erzeugt, meist noch vor der
+    // Anmeldung. Benutzer, Gruppen und die Modelle, die das Backend erst nach
+    // der Anmeldung liefert, werden daher bei jeder An- und Abmeldung neu
+    // geladen.
+    function refresh() {
       vm.username = AuthService.getUsername();
       vm.groups = AuthService.getGroups();
+      vm.isAdministrator = AuthService.isAdministrator();
+      if (AuthService.isAuthenticated()) {
+        toolbarServices.getModelDefinitions().then(function (modelDefinitions) {
+          vm.modelDefinitions = modelDefinitions;
+        });
+      } else {
+        vm.modelDefinitions = [];
+      }
+    }
+
+    vm.$onInit = function () {
+      refresh();
+      $scope.$on(AuthService.CHANGED_EVENT, refresh);
     };
 
     vm.setModelName = function (model) {
@@ -23,8 +37,6 @@
     // gearbeitet wird.
     vm.logout = function () {
       AuthService.logout().then(function () {
-        vm.username = null;
-        vm.groups = [];
         $state.go('login');
       });
     };

@@ -30,6 +30,7 @@
           <li class="dropdown-header" ng-if="$ctrl.groups.length">Gruppen</li>
           <li ng-repeat="group in $ctrl.groups"><a>{{ group }}</a></li>
           <li class="divider" ng-if="$ctrl.groups.length"></li>
+          <li ui-sref-active="active" ng-if="$ctrl.isAdministrator"><a ui-sref="groups">Benutzergruppen verwalten</a></li>
           <li ui-sref-active="active"><a ui-sref="password">Passwort ändern</a></li>
           <li><a ng-click="$ctrl.logout()">Abmelden</a></li>
         </ul>

@@ -81,6 +81,11 @@ angular
         templateUrl: 'components/login/password-change.html',
         controller: 'PasswordChangeCtrl'
       })
+      .state('groups', {
+        url: '/groups',
+        templateUrl: 'components/access/groups.html',
+        controller: 'GroupsCtrl'
+      })
       .state('about', {
         url: '/about',
         templateUrl: 'components/about/about.html'
@@ -225,6 +230,19 @@ angular
       }
       if (!AuthService.isAuthenticated()) {
         return transition.router.stateService.target('login');
+      }
+    });
+  })
+  .run(function ($rootScope, AuthService, Datasets) {
+    // ui-common laedt alle sichtbaren Stammdaten einmalig beim Start der
+    // Anwendung, oft noch vor der Anmeldung. Da jeder Benutzer andere
+    // Stammdaten sehen darf, wird der Zwischenspeicher bei jeder An- und
+    // Abmeldung neu geladen beziehungsweise geleert.
+    $rootScope.$on(AuthService.CHANGED_EVENT, function () {
+      if (AuthService.isAuthenticated()) {
+        Datasets.initialDataPromise = Datasets.fetchAll();
+      } else {
+        Datasets.data = [];
       }
     });
   })

@@ -8,6 +8,11 @@
       <i class="fa fa-pencil" title="Bearbeiten"></i>
     </a>
     <a style="margin-right:5px; text-decoration: none; cursor: pointer"
+            title="Stammdatum freigeben"
+            ng-click="grid.appScope.onShare(row.entity)">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    <a style="margin-right:5px; text-decoration: none; cursor: pointer"
             title="Stammdatum kopieren"
             ng-disabled="grid.appScope.isEditing"
             ng-click="grid.appScope.onCopy(row.entity)">

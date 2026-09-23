@@ -50,6 +50,13 @@ angular.module('irpsimApp')
           $injector.get('AuthService').discard();
           $injector.get('$state').go(LOGIN_STATE);
         }
+        // Das Backend antwortet mit 403, wenn Lese- oder Schreibrecht fehlen.
+        // Der Freigabedialog und die Gruppenverwaltung zeigen eigene Meldungen.
+        var handledLocally = angular.isString(url) &&
+          (url.indexOf('/backend/simulation/access/') === 0 || url.indexOf('/backend/simulation/groups') === 0);
+        if (rejection && rejection.status === 403 && !handledLocally) {
+          $injector.get('growl').error('Für diese Aktion fehlt die Berechtigung.');
+        }
         return $q.reject(rejection);
       }
     };
