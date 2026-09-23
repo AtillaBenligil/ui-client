@@ -41,9 +41,9 @@ angular.module('irpsimApp')
           $state.go('login');
         })
         .catch(function (response) {
-          $scope.error = response && response.status === 401
-            ? 'Das bisherige Passwort ist falsch.'
-            : 'Das Passwort konnte nicht geändert werden.';
+          $scope.error = response && response.status === 401 ?
+            'Das bisherige Passwort ist falsch.' :
+            'Das Passwort konnte nicht geändert werden.';
         })
         .finally(function () {
           $scope.busy = false;

@@ -25,6 +25,9 @@ module.exports = function (config) {
       'bower_components/angular-xeditable/dist/js/xeditable.min.js',
       'bower_components/angular-sanitize/angular-sanitize.min.js',
       'bower_components/angular-animate/angular-animate.min.js',
+      'bower_components/angular-aria/angular-aria.js',
+      'bower_components/angular-messages/angular-messages.js',
+      'bower_components/angular-material/angular-material.js',
       'bower_components/angular-ui-router/release/angular-ui-router.min.js',
       'bower_components/angular-bootstrap/ui-bootstrap.min.js',
       'bower_components/angular-loading-bar/build/loading-bar.min.js',
@@ -39,6 +42,9 @@ module.exports = function (config) {
       'bower_components/jszip/dist/jszip.js',
       'bower_components/file-saver/dist/FileSaver.js',
       'app/components/app.js',
+      // Moduldefinitionen vor den Komponenten laden, die sich darin registrieren;
+      // sonst scheitert etwa toolbar.component.js an der alphabetischen Reihenfolge.
+      'app/components/**/*.module.js',
       'app/components/**/*.service.js',
       'app/**/*.js',
       {
@@ -55,7 +61,7 @@ module.exports = function (config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', 'html', 'json-log'],
+    reporters: ['progress', 'html'],
 
     htmlReporter: {
       outputFile: 'app/test/report.html',
@@ -66,10 +72,6 @@ module.exports = function (config) {
       groupSuites: true,
       useCompactStyle: true,
       useLegacyStyle: false
-    },
-
-    jsonLogReporter: {
-      outputPath: 'app/test/JSONlog.json'
     },
 
     browserNoActivityTimeout: 100000,
