@@ -1,7 +1,7 @@
 'use strict';
 angular.module('irpsimApp')
 
-  .directive('resultTableEditor', function (d3locale, Simulations, growl, $filter, $http, $stateParams) {
+  .directive('resultTableEditor', function (d3locale, Simulations, growl, $filter, $http, $stateParams, AccessDialog) {
     return {
       restrict: 'E',
       scope: {
@@ -28,10 +28,18 @@ angular.module('irpsimApp')
         scope.filteroptions = {};
 
         /**
+         * Oeffnet den Freigabedialog der Simulation.
+         */
+        scope.shareSimulation = function (simulation) {
+          AccessDialog.open('JOB', simulation.id, 'Simulation ' + simulation.id);
+        };
+
+        /**
          * converts time from ms in something appropriate
          *
          */
         var fmt = d3locale.timeFormat('%d.%m.%Y %H:%M');
+
         scope.convertTime = function (ms) {
           if(ms) {
             return fmt(new Date(ms));

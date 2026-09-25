@@ -1,0 +1,69 @@
+<div class="modal-header">
+  <h3 class="modal-title">Freigaben: {{ resource.label }}</h3>
+</div>
+<div class="modal-body">
+  <p class="text-muted">
+    Wer hier eingetragen ist, darf die Ressource lesen oder – mit Schreibrecht – auch verändern
+    und ihre Freigaben verwalten. Administratoren haben stets vollen Zugriff.
+  </p>
+
+  <table class="table table-condensed">
+    <thead>
+    <tr>
+      <th>Art</th>
+      <th>Name</th>
+      <th>Recht</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="entry in entries">
+      <td>
+        <i class="fa" ng-class="entry.subjectType === 'GROUP' ? 'fa-users' : 'fa-user'"></i>
+        {{ entry.subjectType === 'GROUP' ? 'Gruppe' : 'Benutzer' }}
+      </td>
+      <td>{{ entry.subjectName }}</td>
+      <td>
+        <select class="form-control input-sm" ng-model="entry.permission" ng-change="change(entry)">
+          <option value="READ">Lesen</option>
+          <option value="WRITE">Lesen und Schreiben</option>
+        </select>
+      </td>
+      <td>
+        <a href="" title="Freigabe entziehen" ng-click="remove(entry)" style="color: rgb(217, 83, 79)">
+          <i class="fa fa-remove"></i>
+        </a>
+      </td>
+    </tr>
+    <tr ng-if="!busy && entries.length === 0">
+      <td colspan="4" class="text-muted">
+        Keine Freigaben eingetragen – die Ressource stammt aus der Zeit vor der Rechteverwaltung
+        und ist für alle lesbar.
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <form class="form-inline" ng-submit="add()" name="addForm" novalidate>
+    <select class="form-control" ng-model="newEntry.subjectType">
+      <option value="USER">Benutzer</option>
+      <option value="GROUP">Gruppe</option>
+    </select>
+    <input type="text" class="form-control" ng-model="newEntry.subjectName" required
+           list="access-group-names"
+           placeholder="{{ newEntry.subjectType === 'GROUP' ? 'Gruppenname' : 'Anmeldename' }}">
+    <datalist id="access-group-names">
+      <option ng-if="newEntry.subjectType === 'GROUP'" ng-repeat="name in groups" value="{{ name }}"></option>
+    </datalist>
+    <select class="form-control" ng-model="newEntry.permission">
+      <option value="READ">Lesen</option>
+      <option value="WRITE">Lesen und Schreiben</option>
+    </select>
+    <button type="submit" class="btn btn-primary" ng-disabled="addForm.$invalid">Freigeben</button>
+  </form>
+
+  <div class="alert alert-danger" ng-if="error" role="alert" style="margin-top: 15px">{{ error }}</div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-default" ng-click="close()">Schließen</button>
+</div>

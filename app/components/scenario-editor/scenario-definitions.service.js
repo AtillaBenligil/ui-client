@@ -43,7 +43,9 @@ angular.module('irpsimApp')
       if(d){
         cacheDefinition(modelDefinition,d);
         var deferred = $q.defer();
-        deferred.resolve(d);
+        // 'all' liefert beim Laden vom Backend nur die Definitionen; aus dem
+        // Zwischenspeicher muss dieselbe Struktur kommen.
+        deferred.resolve(modelDefinition === 'all' ? d.definitions : d);
         return deferred.promise;
       } else {
         return loadDefinitionsInternal(modelDefinition, modelDefinitionIds);

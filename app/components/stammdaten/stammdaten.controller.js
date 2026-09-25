@@ -8,7 +8,7 @@
  * Controller of the irpsimApp. Handles CRUD for master data
  */
 angular.module('irpsimApp')
-  .controller('StammdatenCtrl', function ($scope, $filter, $http, $q, Logger, Datasets, Upload, uiGridConstants, localStorageService, $timeout, $uibModal, $log, growl) {
+  .controller('StammdatenCtrl', function ($scope, $filter, $http, $q, Logger, Datasets, Upload, uiGridConstants, localStorageService, $timeout, $uibModal, $log, growl, AccessDialog) {
 
     /**
      * Updates the master data table. Will be called after operations like
@@ -118,39 +118,6 @@ angular.module('irpsimApp')
           name: 'Szenarien',
           width: 200,
           visible: true
-        },
-        {
-          cellTemplate: template('verantwortlicherBezugsjahr.name'),
-          field: 'verantwortlicherBezugsjahr.name',
-          name: 'Verantwortlich Bezugsjahr',
-          type: 'string',
-          width: 200,
-          visible: true
-        },
-        {
-          cellTemplate: template('verantwortlicherBezugsjahr.email'),
-          field: 'verantwortlicherBezugsjahr.email',
-          name: 'Email Verantwortlich Bezugsjahr',
-          cellTooltip: true,
-          type: 'string',
-          width: 250,
-          visible: false
-        },
-        {
-          cellTemplate: template('verantwortlicherPrognosejahr.name'),
-          field: 'verantwortlicherPrognosejahr.name',
-          name: 'Verantwortlich Prognosen',
-          type: 'string',
-          width: 200,
-          visible: true
-        },
-        {
-          cellTemplate: template('verantwortlicherPrognosejahr.email'),
-          field: 'verantwortlicherPrognosejahr.email',
-          name: 'Email Verantwortlich Prognosen',
-          type: 'string',
-          width: 250,
-          visible: false
         },
         {
           cellTemplate: template('setName1'),
@@ -386,6 +353,14 @@ angular.module('irpsimApp')
       }
 
       $scope.openAddingModal($scope.newEntry);
+    };
+
+    /**
+     * Oeffnet den Freigabedialog; die Rechteverwaltung ersetzt die frueheren
+     * verantwortlichen Personen.
+     */
+    $scope.onShare = function (entry) {
+      AccessDialog.open('STAMMDATUM', entry.id, $scope.getView(entry, 'name') || ('Stammdatum ' + entry.id));
     };
 
     $scope.onCopy = function (entry) {

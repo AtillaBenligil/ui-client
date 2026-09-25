@@ -7,7 +7,7 @@
  * # download
  */
 angular.module('irpsimApp')
-  .directive('scenarioTableEditor', function ($log, d3locale, ScenarioConfiguration, growl, localStorageService){
+  .directive('scenarioTableEditor', function ($log, d3locale, ScenarioConfiguration, growl, localStorageService, AccessDialog){
     return {
       restrict: 'E',
       scope: {
@@ -43,6 +43,9 @@ angular.module('irpsimApp')
             }
           );
         }
+        scope.shareScenario = function (scenario){
+          AccessDialog.open('SCENARIO', scenario.id, scenario.name);
+        };
         scope.deleteScenario = function (scenario){
           ScenarioConfiguration.deleteScenario(scenario.id).then(function (){
             growl.success('Szenario erfolgreich gelöscht.');

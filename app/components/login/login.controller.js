@@ -28,9 +28,9 @@ angular.module('irpsimApp')
           $state.go('/');
         })
         .catch(function (response) {
-          $scope.error = response && response.status === 401
-            ? 'Benutzername oder Passwort ist falsch.'
-            : 'Das Verzeichnis ist zurzeit nicht erreichbar.';
+          $scope.error = response && response.status === 401 ?
+            'Benutzername oder Passwort ist falsch.' :
+            'Das Verzeichnis ist zurzeit nicht erreichbar.';
         })
         .finally(function () {
           $scope.busy = false;
