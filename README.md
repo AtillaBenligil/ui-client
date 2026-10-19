@@ -1,3 +1,18 @@
+> ## My contribution: login and access management UI (2026)
+>
+> This fork of the [IRPsim UI client](https://github.com/IRPsim/ui-client) (AngularJS)
+> is the frontend for my [LDAP and access-control backend work](https://github.com/AtillaBenligil/backend).
+> University project.
+>
+> - **Login:** a login screen, password change, an auth service with an HTTP
+>   interceptor that attaches the session token, and the user menu in the toolbar.
+> - **Access management:** a sharing dialog to grant users and groups read/write access to
+>   scenarios, simulation results and standing data, and a group management page.
+> - **Build:** dependency updates that make the Karma test suite run again.
+>
+> 6 commits, about 1,200 lines added. Commit messages are in German, the project's
+> working language.
+
 # Benutzeroberfläche für das IRPsim-Projekt
 ## Initiale Einrichtung der Entwicklungumgebung
 
